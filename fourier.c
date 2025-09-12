@@ -83,13 +83,6 @@ void fft(complex s[], complex t[], int n, int sign) {
         
     }
 
-    if (s == t){
-
-        for(int i=0; i<n;i++){
-            s[i] = t[i];// sobre escrição de vetores
-        }
-    }
-
 }
 
 void fft_forward(complex s[], complex t[], int n) {
@@ -127,10 +120,20 @@ void fft_forward_2d(complex matrix[MAX_SIZE][MAX_SIZE], int width, int height) {
 }
 
 //Verificar se está funcionando (inverti a ordem dos loops de linhas e colunas)
+//Vetor auxiliar so vai até maior dimensão da matrix, como ele é sobre escrito a cada interação dos loops que o usam
 void fft_inverse_2d(complex matrix[MAX_SIZE][MAX_SIZE], int width, int height) {
     //Exatamente o mesmo conceito da fft_forward_2d porem muda a funçao chamada pela fft_inverse
-    // Vetor auxiliar 
-    complex temp[MAX_SIZE];
+    
+    // Vetor auxiliar
+    int size = 0;
+    if(width > height){
+        size = width;
+    }
+    else{
+        size = height;
+    }
+
+    complex temp[size];
 
     // FFT nas colunas 
     for (int x = 0; x < width; x++) {
