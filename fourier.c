@@ -106,13 +106,13 @@ void fft_forward_2d(complex matrix[MAX_SIZE][MAX_SIZE], int width, int height) {
     }
 
     complex time_domain[size];
-    complex complex_domain[size];
+    complex frequency_domain[size];
     
     // FFT nas linhas primeiro
     for (int y = 0; y < height; y++) {
-        fft_forward(matrix[y], complex_domain, width);
+        fft_forward(matrix[y], frequency_domain, width);
         for (int x = 0; x < width; x++) {
-            matrix[y][x] = complex_domain[x]; // Sobrescreve a entrada
+            matrix[y][x] = frequency_domain[x]; // Sobrescreve a entrada
         }
     }
 
@@ -121,9 +121,9 @@ void fft_forward_2d(complex matrix[MAX_SIZE][MAX_SIZE], int width, int height) {
         for (int y = 0; y < height; y++) {
             time_domain[y] = matrix[y][x]; 
         }
-        fft_forward(time_domain, complex_domain, height);
+        fft_forward(time_domain, frequency_domain, height);
         for (int y = 0; y < height; y++) {
-            matrix[y][x] = complex_domain[y]; // Sobrescreve a entrada
+            matrix[y][x] = frequency_domain[y]; // Sobrescreve a entrada
         }
     }
 
@@ -144,24 +144,24 @@ void fft_inverse_2d(complex matrix[MAX_SIZE][MAX_SIZE], int width, int height) {
     }
 
     complex time_domain[size];
-    complex complex_domain[size];
+    complex frequency_domain[size];
 
     // FFT nas colunas 
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
             time_domain[y] = matrix[y][x]; 
         }
-        fft_inverse(time_domain, complex_domain, height);
+        fft_inverse(time_domain, frequency_domain, height);
         for (int y = 0; y < height; y++) {
-            matrix[y][x] = complex_domain[y]; // Sobrescreve a entrada
+            matrix[y][x] = frequency_domain[y]; // Sobrescreve a entrada
         }
     }
 
     // FFT nas linhas 
     for (int y = 0; y < height; y++) {
-        fft_inverse(matrix[y], complex_domain, width); 
+        fft_inverse(matrix[y], frequency_domain, width); 
         for (int x = 0; x < width; x++) {
-            matrix[y][x] = complex_domain[x]; // Sobrescreve a entrada
+            matrix[y][x] = frequency_domain[x]; // Sobrescreve a entrada
         }
     }
 
