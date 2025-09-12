@@ -95,25 +95,35 @@ void fft_inverse(complex t[], complex s[], int n) {
 }
 
 void fft_forward_2d(complex matrix[MAX_SIZE][MAX_SIZE], int width, int height) {
-    // Vetor auxiliar 
-    complex temp[MAX_SIZE];
 
+    // Vetor auxiliar 
+    int size = 0;
+    if(width > height){
+        size = width;
+    }
+    else{
+        size = height;
+    }
+
+    complex time_domain[size];
+    complex complex_domain[size];
+    
     // FFT nas linhas primeiro
     for (int y = 0; y < height; y++) {
-        fft_forward(matrix[y], temp, width);
+        fft_forward(matrix[y], complex_domain, width);
         for (int x = 0; x < width; x++) {
-            matrix[y][x] = temp[x]; // Sobrescreve a entrada
+            matrix[y][x] = complex_domain[x]; // Sobrescreve a entrada
         }
     }
 
     // FFT nas colunas depois
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
-            temp[y] = matrix[y][x]; 
+            time_domain[y] = matrix[y][x]; 
         }
-        fft_forward(temp, temp, height); 
+        fft_forward(time_domain, complex_domain, height);
         for (int y = 0; y < height; y++) {
-            matrix[y][x] = temp[y]; // Sobrescreve a entrada
+            matrix[y][x] = complex_domain[y]; // Sobrescreve a entrada
         }
     }
 
@@ -133,24 +143,25 @@ void fft_inverse_2d(complex matrix[MAX_SIZE][MAX_SIZE], int width, int height) {
         size = height;
     }
 
-    complex temp[size];
+    complex time_domain[size];
+    complex complex_domain[size];
 
     // FFT nas colunas 
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++) {
-            temp[y] = matrix[y][x]; 
+            time_domain[y] = matrix[y][x]; 
         }
-        fft_inverse(temp, temp, height); 
+        fft_inverse(time_domain, complex_domain, height);
         for (int y = 0; y < height; y++) {
-            matrix[y][x] = temp[y]; // Sobrescreve a entrada
+            matrix[y][x] = complex_domain[y]; // Sobrescreve a entrada
         }
     }
 
     // FFT nas linhas 
     for (int y = 0; y < height; y++) {
-        fft_inverse(matrix[y], temp, width); 
+        fft_inverse(matrix[y], complex_domain, width); 
         for (int x = 0; x < width; x++) {
-            matrix[y][x] = temp[x]; // Sobrescreve a entrada
+            matrix[y][x] = complex_domain[x]; // Sobrescreve a entrada
         }
     }
 
